@@ -1,0 +1,56 @@
+---
+import Base from '../layouts/Base.astro';
+import { formatDate, formatTags, getVisiblePosts } from '../lib/posts';
+
+const posts = await getVisiblePosts();
+---
+<Base
+  title="Bruno Bahri · application security"
+  description="Field notes on application security for multi-tenant SaaS: sandboxing untrusted code, authorization, authentication, SSRF and audit trails."
+>
+<section class="hero">
+<p class="prompt">$ whoami</p>
+<h1>Bruno Bahri. Application security for multi-tenant SaaS.</h1>
+<p class="lede">Field notes from the defender's side: sandboxing untrusted code, authorization flaws, session security, SSRF and audit trails. Bugs are written up only after they are fixed.</p>
+</section>
+<section class="block">
+<p class="prompt">$ cat focus.txt</p>
+<ul class="focus">
+<li>untrusted code execution and sandboxing</li>
+<li>authorization and tenant isolation</li>
+<li>authentication, sessions and 2FA</li>
+<li>SSRF and egress control</li>
+<li>audit logging and detection</li>
+<li>secure code review</li>
+</ul>
+</section>
+<section id="posts" class="block">
+<p class="prompt">$ ls -lt posts/</p>
+{posts.length === 0 ? (
+<p class="muted">total 0</p>
+) : (
+<ul class="posts">
+{posts.map((post) => (
+<li>
+<a href={`/posts/${post.id}`}>
+<span class="date">{formatDate(post.data.date)}</span>
+<span class="entry">
+<span class="title">{post.data.title}</span>
+<span class="tags">{formatTags(post.data.tags)}</span>
+</span>
+</a>
+</li>
+))}
+</ul>
+)}
+</section>
+<section id="about" class="block">
+<p class="prompt">$ cat about.txt</p>
+<p class="about">Backend engineer leading security for a Brazilian B2B SaaS. Day to day that means reviewing code for access-control and isolation flaws, sandboxing customer code, hardening authentication and keeping an audit trail. The employer stays anonymous, and nothing here describes a weakness that is still open.</p>
+<ul class="links">
+<li><a href="https://github.com/brunobahri">github.com/brunobahri</a></li>
+<li><a href="/.well-known/security.txt">security contact</a></li>
+<li><a href="/rss.xml">rss</a></li>
+</ul>
+</section>
+</Base>

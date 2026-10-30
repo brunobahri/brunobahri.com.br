@@ -1,0 +1,28 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { formatDate, formatTags, getVisiblePosts, type Post } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getVisiblePosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+<Base title={`${post.data.title} · Bruno Bahri`} description={post.data.description} type="article">
+<article class="post">
+<p class="meta">{formatDate(post.data.date)} · {formatTags(post.data.tags)}</p>
+<h1>{post.data.title}</h1>
+<p class="tldr"><span>tl;dr</span>{post.data.description}</p>
+<div class="prose">
+<Content />
+</div>
+<p class="back"><a href="/#posts">← all posts</a></p>
+</article>
+</Base>
